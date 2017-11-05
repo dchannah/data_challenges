@@ -27,3 +27,12 @@ With an eye toward time complexity, I will look at each step of the algorithm in
 All in all, the sorting algorithm is likely to be the bottleneck, and will be somewhere in between O(n) and O(nlogn), depending on how bad the particular sort case is. To check this reasoning, I used cProfile to time the execution of this program for a variety of different input list sizes, found in the inputs_for_timing/ folder. Note that I generated these by simply duplicating the smaller test case in input.txt, so these input files for timing do not necessarily reflect performance on lists that are truly randomly ordered (so there is room for improvement here). When using the default timsort, the program appears to be very close to the linear scaling regime:
 
 ![timsort](./figures/timing_timsort.png)
+
+For sport, I wanted to check a few other algorithms to demonstrate the sorting algorithm was the bottleneck. Python's timsort has a number of built-in, low-level optimization that make it very, very efficient, so I don't anticipate that anything implemented in a local module will be able to compete. Nevertheless, I wrote a mergesort and insertion_sort implementation in sorting_algos.py and ran some timing tests (see time.sh) on these as well.
+
+![comparison](./figures/timing_comparison.png)
+
+Mergesort, while still fast, at least seems to have a slower scaling constant than timsort, which is not surprising, while insertion sort quickly balloons to its well-known O(n<sup>2</sup>) behavior. I want to emphasize again that input files for timing are repetitions of the base input file, and more randomization would be needed to rigorously explore best/worst/average case timing.
+
+## Testing ##
+The test suite (test_suite.py) is fairly simple; it uses unittest to run through a few distinct test cases. Right now, it uses a global variable to control which sorting algorithm is tested - this is a bit hacky but I am trying to stay within the time constraints of the data challenge. Ideally the test suite should run through all available sorting algorithms when the program is being tested, but to keep the test suite fast I used a global variable while I was developing the sorting algorithms.
